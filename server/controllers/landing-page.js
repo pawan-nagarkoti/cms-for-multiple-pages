@@ -6,7 +6,7 @@ const getLandingPage = async (req, res) => {
     const getLandingPagesData = await landingPage.find({});
     if (getLandingPagesData.length > 0) {
       return res.status(200).json({
-        data: getLandingPagesData,
+        data: getLandingPagesData.reverse(),
         message: "landing page fetched successfully",
       });
     } else {
@@ -23,12 +23,25 @@ const getLandingPage = async (req, res) => {
   }
 };
 
-const getSingleLandingPage = (req, res) => {
+const getSingleLandingPage = async (req, res) => {
   try {
+    const singlePageId = req.params.id;
+    if (!singlePageId) {
+      res.status(400).json({
+        message: "Please enter correct Id",
+      });
+    }
+    const singlePageData = await landingPage.findById(singlePageId);
+
+    res.status(200).json({
+      success: true,
+      data: singlePageData,
+      message: "single landing page data fetched",
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
-      message: "something is wrong!",
+      message: "something went wrong please try again",
     });
   }
 };
@@ -81,8 +94,13 @@ const addLandingPage = async (req, res) => {
       description: parsedBody["aboutProject.description"],
     };
 
+    const brochureContentFiles = req.files.filter((f, i) => f.fieldname === "brochureContent.icon");
+    const brochureContentIcon = brochureContentFiles.map((file) => ({
+      image: `${baseUrl}/${file.filename}`,
+    }));
+
     const brochureContent = {
-      icon: parsedBody["brochureContent.icon"],
+      icon: brochureContentIcon[0].image,
       paragraph: parsedBody["brochureContent.paragraph"],
     };
 
@@ -179,6 +197,18 @@ const addLandingPage = async (req, res) => {
     }));
     locationAdvantage["image"] = loationImage[0].image;
 
+    // imageForVideo
+    const imageForVideoFiles = req.files.filter((f, i) => f.fieldname === "imageForVideo");
+    const imageForVideo = imageForVideoFiles.map((file) => ({
+      image: `${baseUrl}/${file.filename}`,
+    }));
+
+    // map
+    const mapFiles = req.files.filter((f, i) => f.fieldname === "map");
+    const map = mapFiles.map((file) => ({
+      image: `${baseUrl}/${file.filename}`,
+    }));
+
     // add landing page data
     const newLandingPageAdded = await landingPage.create({
       landingPageName,
@@ -201,6 +231,8 @@ const addLandingPage = async (req, res) => {
       qrCode,
       amenities,
       locationAdvantage,
+      imageForVideo: imageForVideo[0].image,
+      map: map[0].image,
     });
 
     res.status(201).json({
@@ -216,7 +248,7 @@ const addLandingPage = async (req, res) => {
   }
 };
 
-const updateLandingPage = (req, res) => {
+const updateLandingPage = async (req, res) => {
   try {
   } catch (error) {
     console.log(error.message);
@@ -226,12 +258,38 @@ const updateLandingPage = (req, res) => {
   }
 };
 
-const deleteLandingPage = (req, res) => {
+const deleteLandingPage = async (req, res) => {
   try {
+    const deleteId = req.params.id;
+    if (!deleteId) {
+      res.status(400).json({
+        message: "please enter correct id",
+      });
+    }
+    const deletedLandingPageData = await landingPage.findByIdAndDelete(deleteId);
+    res.status(200).json({
+      status: true,
+      data: deletedLandingPageData,
+      message: "landing page deleted successfully",
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
-      message: "something is wrong!",
+      message: "landing page deleted",
+    });
+  }
+};
+
+const deleteAllLandingPage = async (req, res) => {
+  try {
+    await landingPage.deleteMany({});
+    res.status(200).json({
+      message: "all landing pages are deleted",
+    });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({
+      message: "delete all landing page",
     });
   }
 };
@@ -242,4 +300,5 @@ module.exports = {
   updateLandingPage,
   getSingleLandingPage,
   deleteLandingPage,
+  deleteAllLandingPage,
 };
