@@ -239,15 +239,12 @@ export default function index() {
       const landingPageFormData = new FormData();
       landingPageFormData.append("landingPageName", landingPageName);
       landingPageFormData.append("logo", logo);
-
-      const r = await axios.post("http://localhost:3000/landing-page/add", landingPageFormData, {
+      const response = await _post(`landing-page/add`, landingPageFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(r);
-      // const response = await _post(`landing-page/add`, landingPageFormData);
-      // console.log(response);
+      console.log(response);
     } catch (error) {
       console.log(error.message);
     }
@@ -258,10 +255,20 @@ export default function index() {
         <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 my-6">Add New Landing Page</h1>
         <form onSubmit={handleLandingPageForm}>
           <CustomHeading text="Basic Information" />
-          <CustomInput label="Landing Page Name" placeholder="Landing Page Name" value={landingPageName} onChange={(e) => setLandingPageName(e.target.value)} />
+          <CustomInput
+            label="Landing Page Name"
+            placeholder="Landing Page Name"
+            value={landingPageName}
+            onChange={(e) => setLandingPageName(e.target.value)}
+          />
           <CustomInput label="Theme Color" placeholder="Theme Color" value={themeColor} onChange={(e) => setThemeColor(e.target.value)} />
           <CustomInput label="Primary Color" placeholder="Primary Color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
-          <CustomInput label="Secondary Color" placeholder="Secondary Color" value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
+          <CustomInput
+            label="Secondary Color"
+            placeholder="Secondary Color"
+            value={secondaryColor}
+            onChange={(e) => setSecondaryColor(e.target.value)}
+          />
           <CustomHeading text="Header" />
           <CustomInput
             label="Logo"
@@ -318,8 +325,18 @@ export default function index() {
               <img src={bannerPreviewImage} alt="Preview Logo" className="mt-4 w-100 h-30  rounded-md border border-gray-300 shadow" />
             </div>
           )}
-          <CustomInput label="Banner Heading" placeholder="banner heading" value={bannerBoxHeading} onChange={(e) => setBannerBoxHeading(e.target.value)} />
-          <CustomInput label="Description" placeholder="description" value={bannerBoxDescription} onChange={(e) => setBannerBoxDescription(e.target.value)} />
+          <CustomInput
+            label="Banner Heading"
+            placeholder="banner heading"
+            value={bannerBoxHeading}
+            onChange={(e) => setBannerBoxHeading(e.target.value)}
+          />
+          <CustomInput
+            label="Description"
+            placeholder="description"
+            value={bannerBoxDescription}
+            onChange={(e) => setBannerBoxDescription(e.target.value)}
+          />
           <CustomInput
             label="Price view heading"
             placeholder="price view heading"
@@ -327,7 +344,12 @@ export default function index() {
             onChange={(e) => setBannerPriceViewHeading(e.target.value)}
           />
           <div className="flex items-center gap-4">
-            <CustomInput label="Banner key Points" placeholder="Banner key name" value={bannerKeyPoints} onChange={(e) => setBannerKeyPoints(e.target.value)} />
+            <CustomInput
+              label="Banner key Points"
+              placeholder="Banner key name"
+              value={bannerKeyPoints}
+              onChange={(e) => setBannerKeyPoints(e.target.value)}
+            />
             <CustomButton text="Add" onClick={handleAddBannerKeyPoints} />
           </div>
           {containerForBannerKeyPoints.length > 0 && (
@@ -342,7 +364,12 @@ export default function index() {
             </div>
           )}
           <CustomHeading text="Project Information" />
-          <CustomInput label="Project Heading" placeholder="Project heading" value={projectHeading} onChange={(e) => setProjectHeading(e.target.value)} />
+          <CustomInput
+            label="Project Heading"
+            placeholder="Project heading"
+            value={projectHeading}
+            onChange={(e) => setProjectHeading(e.target.value)}
+          />
           <CustomInput label="Project Title" placeholder="Project title" value={projectTitle} onChange={(e) => setProjectTitle(e.target.value)} />
           <div className="flex items-center gap-4">
             <CustomInput
@@ -371,9 +398,17 @@ export default function index() {
             </div>
           )}
           <CustomHeading text="Project Overview" />
-          <CustomInput label="Project Overview Heading" placeholder="Project overview heading" onChange={(e) => setProjectOverviewHeading(e.target.value)} />
+          <CustomInput
+            label="Project Overview Heading"
+            placeholder="Project overview heading"
+            onChange={(e) => setProjectOverviewHeading(e.target.value)}
+          />
           <CustomInput label="Project Title" placeholder="Project title" onChange={(e) => setProjectOverviewTitle(e.target.value)} />
-          <CustomTextarea label="Project description" placeholder="Project description" onChange={(e) => setProjectOverviewDescription(e.target.value)} />
+          <CustomTextarea
+            label="Project description"
+            placeholder="Project description"
+            onChange={(e) => setProjectOverviewDescription(e.target.value)}
+          />
           <CustomInput
             label="Project Overview"
             type="file"
@@ -421,7 +456,12 @@ export default function index() {
           )}
           <CustomHeading text="Amenities" />
           <div className="flex items-center gap-4">
-            <CustomInput label="Amenities Text" placeholder="Project sub heading" value={amenitiesName} onChange={(e) => setAmenitiesName(e.target.value)} />
+            <CustomInput
+              label="Amenities Text"
+              placeholder="Project sub heading"
+              value={amenitiesName}
+              onChange={(e) => setAmenitiesName(e.target.value)}
+            />
             <CustomInput label="Amenities Image" type="file" ref={amenitiesImageBox} onChange={(e) => setAmenitiesImage(e.target.files[0])} />
             <CustomButton text="Add" onClick={handleAddAmenities} />
           </div>
@@ -430,7 +470,11 @@ export default function index() {
               {containerForAmenitiesNameAndImage.map((v, i) => (
                 <div key={i} className="p-4 bg-gray-100 rounded-md shadow-md flex flex-col items-center">
                   <p className="text-lg font-semibold text-gray-700 text-center">{v.amenitiesName}</p>
-                  <img src={previewImage(v?.amenitiesImage)} alt={`Amenity ${i}`} className="mt-2 w-32 h-32 object-cover rounded-md border border-gray-300" />
+                  <img
+                    src={previewImage(v?.amenitiesImage)}
+                    alt={`Amenity ${i}`}
+                    className="mt-2 w-32 h-32 object-cover rounded-md border border-gray-300"
+                  />
                   <button
                     onClick={() => setContainerForAmenitiesNameAndImage((s) => s.filter((i) => i.id !== v.id))}
                     className="mt-4 px-4 py-2 text-sm text-white bg-red-500 hover:bg-red-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
@@ -492,7 +536,11 @@ export default function index() {
             <div className="grid grid-cols-4 gap-4 mt-4 mb-4">
               {containerForFloorImage?.map((v, i) => (
                 <div key={i} className="relative">
-                  <img src={previewImage(v.image)} alt={`Preview ${i}`} className="w-full h-40 object-cover rounded-md border border-gray-300 shadow" />
+                  <img
+                    src={previewImage(v.image)}
+                    alt={`Preview ${i}`}
+                    className="w-full h-40 object-cover rounded-md border border-gray-300 shadow"
+                  />
                   <button
                     type="button"
                     onClick={() => setContainerForFloorImage((prev) => prev.filter((s) => s.id !== v.id))}
@@ -640,7 +688,11 @@ export default function index() {
             <div className="grid grid-cols-4 gap-4 mt-4 mb-4">
               {containerForQrCodeImage?.map((v, i) => (
                 <div key={i} className="relative">
-                  <img src={previewImage(v.image)} alt={`Preview ${i}`} className="w-full h-40 object-cover rounded-md border border-gray-300 shadow" />
+                  <img
+                    src={previewImage(v.image)}
+                    alt={`Preview ${i}`}
+                    className="w-full h-40 object-cover rounded-md border border-gray-300 shadow"
+                  />
                   <button
                     onClick={() => setContainerForQrCodeImage((prev) => prev.filter((qr) => qr.id !== v.id))}
                     className="mt-2 px-4 py-2 text-sm text-white bg-red-500 hover:bg-red-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
