@@ -100,7 +100,7 @@ const addLandingPage = async (req, res) => {
     }));
 
     const brochureContent = {
-      icon: brochureContentIcon[0].image,
+      icon: brochureContentIcon[0]?.image || null,
       paragraph: parsedBody["brochureContent.paragraph"],
     };
 
@@ -195,7 +195,7 @@ const addLandingPage = async (req, res) => {
     const loationImage = locationAdvantageFiles.map((file) => ({
       image: `${baseUrl}/${file.filename}`,
     }));
-    locationAdvantage["image"] = loationImage[0].image;
+    locationAdvantage["image"] = loationImage[0]?.image || null;
 
     // imageForVideo
     const imageForVideoFiles = req.files.filter((f, i) => f.fieldname === "imageForVideo");
@@ -225,14 +225,14 @@ const addLandingPage = async (req, res) => {
       playmentPlan,
       priceTable,
       footerContent,
-      gallery,
-      bannerImages,
-      floorPlan,
-      qrCode,
-      amenities,
+      gallery: gallery.length ? gallery : [],
+      bannerImages: bannerImages.length ? bannerImages : [],
+      floorPlan: floorPlan.length ? floorPlan : [],
+      qrCode: qrCode.length ? qrCode : [],
+      amenities: amenities.length ? amenities : [],
       locationAdvantage,
-      imageForVideo: imageForVideo[0].image,
-      map: map[0].image,
+      imageForVideo: imageForVideo[0]?.image || null,
+      map: map[0]?.image || null,
     });
 
     res.status(201).json({
